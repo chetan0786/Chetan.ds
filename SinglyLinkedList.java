@@ -1,6 +1,6 @@
-package Chetan.ds;
+package chetands;
 
- class SinglyLinkedList<E> 
+ public class SinglyLinkedList<E extends Comparable<E>> 
 {
   //---------------- nested Node class ----------------
   /**
@@ -8,7 +8,7 @@ package Chetan.ds;
    * element and to the subsequent node in the list (or null if this
    * is the last node).
    */
-  private static class Node<E> 
+  private static class Node<E extends Comparable<E>> 
   {
     /** The element stored at this node */
     private E element;            // reference to the element stored at this node
@@ -36,6 +36,12 @@ package Chetan.ds;
     public E getElement() 
     { 
       return element; 
+    }
+	
+	
+	public void setElement(E element) 
+    { 
+      this.element=element;
     }
 
     /**
@@ -151,6 +157,198 @@ package Chetan.ds;
 	   
 	   
    }
+   
+    public void reverse()
+  {
+    Node<E> temp=head;
+    Node<E> prev=null;
+    Node<E> current=head;
+    Node<E> next=null;
+    while(current!=null)
+    {
+      next=current.getNext();
+      current.setNext(prev);
+      prev=current;
+      current=next;
+    }
+    head=prev;
+    tail=temp;
+  }
+  
+  
+  
+  public void sort()
+  {
+    Node<E> start=head;
+    while(start!=null)
+    {
+      Node<E> next=start.getNext();
+      while(next!=null)
+      {
+        E x=start.getElement();
+        E y=next.getElement();
+        if(x.compareTo(y)>0)
+        {
+          start.setElement(y);
+          next.setElement(x);
+        }
+        next=next.getNext();
+      }
+      start=start.getNext();
+    }
+  }
+  
+  public void merge(SinglyLinkedList<E> list)
+  {
+	  Node<E> i=head;
+	  Node <E> j=list.head;
+	  Node <E> prev=head;
+	  while(i!=null&&j!=null)
+	  {
+		E x=i.getElement();
+        E y=j.getElement();
+		 if(x.compareTo(y)<0)
+		 {
+			prev=i;
+			i=i.getNext();
+		 }
+		 else{
+			 
+			 Node <E> temp=j;
+			 j=j.getNext();
+			 if(prev==i)
+			 {
+				 temp.setNext(head);
+				 head=temp;
+				 prev=temp;
+				 
+			 }
+			 else{
+			 temp.setNext(prev.getNext());
+			 prev.setNext(temp);
+			 prev=temp;
+			 }
+		 }
+		  
+		  
+	  }
+	  if(i==null&&j!=null)
+	  {
+		  prev.setNext(j);
+		  while(j.getNext()!=null)
+		  {
+			  j=j.getNext();
+		  }
+		  
+		  tail=j;
+		  
+	  }
+	  
+	  
+	  
+	  
+	  
+  }
+  
+  
+  
+  public  E cycle()
+  {
+	  Node <E> slow=head;
+	  Node <E> fast=head;
+	  while(fast.getNext()!=null&&fast.getNext().getNext()!=null)
+    {
+        slow=slow.getNext();
+     fast=fast.getNext().getNext();
+    
+        if(slow==fast)
+        {
+          slow=head;
+          while(fast!=null)
+          {
+              if(slow==fast)
+              {
+                  return slow.getElement();
+              }
+              
+              slow=slow.getNext();
+              fast=fast.getNext();
+          }
+        }
+         
+        
+    }
+    return head.getElement();
+	  
+  }
+  
+  public E mergepoint(SinglyLinkedList<E> list)
+  {
+	  
+	  Node <E>temp1=head;
+	  Node <E>temp2=list.head;
+	  int count1=0;
+	  int count2=0;
+	  while(temp1!=null)
+	  {
+		 temp1=temp1.getNext();
+		  count1++;
+		  
+	  }
+	 
+	  while(temp2!=null)
+	  {
+		 temp2=temp2.getNext();
+		  count2++;
+		  
+	  }
+	  if(count1>count2)
+	  {
+		  count1=count1-count2;
+		  temp1=head;
+		  int i=0;
+		  while(temp1!=null&&i!=count1)
+		  {
+			  temp1=temp1.getNext();
+			  i++;
+		  }
+		  temp2=list.head;
+	  }
+	  else{
+		   count2=count2-count1;
+		  temp2=list.head;
+		  int i=0;
+		  while(temp2!=null&&i!=count2)
+		  {
+			  temp2=temp2.getNext();
+			  i++;
+		  }
+		  temp1=head;
+		  
+	  }
+	  while(temp1!=null&&temp1!=temp2)
+	  {
+		  E x=temp1.getElement();
+		  E y=temp2.getElement();
+		  if(x.compareTo(y)==0)
+		  {
+			  break;
+		  }
+		  temp1=temp1.getNext();
+		  temp2=temp2.getNext();
+	  }
+	  
+	  return temp1.getElement();
+	  
+  }
+  
+  
+  
+  
+  
+  
+  
+   
    
   public void addLast(E e) {                 // adds element e to the end of the list
     Node<E> newest = new Node<>(e, null);    // node will eventually be the tail
